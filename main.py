@@ -19,11 +19,19 @@ if len(sys.argv) < 2:
     print("please provide a prompt.")
     sys.exit(1)
 
-prompt = " ".join(sys.argv[1:])
+#join the user input for prompt
+user_prompt = " ".join(sys.argv[1:])
+
+#user input list
+from google.genai import types
+
+messages = [
+        types.Content(role="user", parts=[types.Part(text=user_prompt)]),
+        ]
 
 #create a response model to print response text to the console
 response = client.models.generate_content(
-    model='gemini-2.0-flash-001', contents= prompt
+    model='gemini-2.0-flash-001', contents=messages,
 ) 
    
 # log prompt tokens used
