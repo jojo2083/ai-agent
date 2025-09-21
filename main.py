@@ -12,10 +12,20 @@ from google import genai
 #map client to apikey
 client = genai.Client(api_key=api_key)
 
+# user provides prompt during script execution
+import sys
+
+if len(sys.argv) < 2:
+    print("please provide a prompt.")
+    sys.exit(1)
+
+prompt = " ".join(sys.argv[1:])
+
 #create a response model to print response text to the console
 response = client.models.generate_content(
-    model='gemini-2.0-flash-001', contents='Why is Boot.dev such a great place to learn backend development? Use one paragraph maximum.'
-)
+    model='gemini-2.0-flash-001', contents= prompt
+) 
+   
 # log prompt tokens used
 prompt_tokens = response.usage_metadata.prompt_token_count
 
