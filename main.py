@@ -19,6 +19,7 @@ if len(sys.argv) < 2:
     print("please provide a prompt.")
     sys.exit(1)
 
+
 #join the user input for prompt
 user_prompt = " ".join(sys.argv[1:])
 
@@ -40,15 +41,16 @@ prompt_tokens = response.usage_metadata.prompt_token_count
 # log response tokens used
 response_tokens = response.usage_metadata.candidates_token_count
 
-# print response text, prompt tokens consumend, and response tokens consumed
-print(response.text)
-print(f"Prompt tokens: {prompt_tokens}"),
-print(f"Response tokens: {response_tokens}")
-
-
 def main():
     print("Hello from aiagent!")
 
+for arg in sys.argv[1:]:
+    if arg == "--verbose":
+        print(f"Prompt tokens: {prompt_tokens}"),
+        print(f"Response tokens: {response_tokens}"),
+        print(f"User prompt: {user_prompt}")
+
+print(response.text)
 
 if __name__ == "__main__":
     main()
