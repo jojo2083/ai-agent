@@ -1,13 +1,17 @@
 from functions.get_files_info import get_files_info
 
-get_files_info("calculator", ".")
- #Result for current directory:
- #- main.py: file_size=719 bytes, is_dir=False
- #- tests.py: file_size=1331 bytes, is_dir=False
- #- pkg: file_size=44 bytes, is_dir=True
- 
-print(f'get_files_info("calculator", "pkg"')
+def main():
+    working_dir = "calculator"
+    root_contents = get_files_info(working_dir)
+    print(root_contents)
+    pkg_contents = get_files_info(working_dir, "pkg")
+    print(pkg_contents)
+    boundry_test = get_files_info(working_dir, "/bin")
+    print(boundry_test)
+    boundry_test2 = get_files_info(working_dir, "../")
+    print(boundry_test2)
 
-print(get_files_info("calculator", "/bin"))
+main()
 
-print(get_files_info("calculator", "../"))
+
+

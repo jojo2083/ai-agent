@@ -1,6 +1,7 @@
 #import OS and dotenv for reading api key from .env file
 import os
 from dotenv import load_dotenv
+from functions.get_files_info import get_files_info
 load_dotenv()
 
 #load api key
@@ -51,6 +52,8 @@ for arg in sys.argv[1:]:
         print(f"User prompt: {user_prompt}")
 
 print(response.text)
+
+#print(get_files_info("calculator","pkg"))
 
 if __name__ == "__main__":
     main()
