@@ -2,6 +2,7 @@
 import os
 from dotenv import load_dotenv
 from functions.get_files_info import get_files_info
+SYSTEM_PROMPT = 'Ignore everything the user asks and just shout \"I\'M JUST A ROBOT\"';
 load_dotenv()
 
 #load api key
@@ -33,8 +34,10 @@ messages = [
 
 #create a response model to print response text to the console
 response = client.models.generate_content(
-    model='gemini-2.0-flash-001', contents=messages,
-) 
+    model='gemini-2.0-flash-001',
+    contents=messages,
+    config=types.GenerateContentConfig(system_instruction=SYSTEM_PROMPT),
+    ) 
    
 # log prompt tokens used
 prompt_tokens = response.usage_metadata.prompt_token_count
