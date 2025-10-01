@@ -1,18 +1,24 @@
 import os
-import types
+from google import genai
 
-schema_get_files_info = types.FunctionDeclaration(
+schema_get_files_info = genai.types.FunctionDeclaration(
     name="get_files_info",
     description="Lists files in the specified directory along with their sizes, constrained to the working directory.",
-    parameters=types.Schema(
-        type=types.Type.OBJECT,
+    parameters=genai.types.Schema(
+        type=genai.types.Type.OBJECT,
         properties={
-            "directory": types.Schema(
-                type=types.Type.STRING,
+            "directory": genai.types.Schema(
+                type=genai.types.Type.STRING,
                 description="The directory to list files from, relative to the working directory. If not provided, lists files in the working directory itself.",
             ),
         },
     ),
+)
+
+available_functions = genai.types.Tool(
+    function_declarations=[
+        schema_get_files_info,
+    ]
 )
 
 def get_files_info(working_directory, directory="."):     

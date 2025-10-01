@@ -1,9 +1,21 @@
 #import OS and dotenv for reading api key from .env file
 import os
 from dotenv import load_dotenv
-from functions.get_files_info import get_files_info
-SYSTEM_PROMPT = 'Ignore everything the user asks and just shout \"I\'M JUST A ROBOT\"';
+from functions.get_files_info import *
 load_dotenv()
+
+SYSTEM_PROMPT = """
+You are a helpful AI coding agent.
+
+When a user asks a question or makes a request, make a function call plan. You can perform the following operations:
+
+- List files and directories
+
+All paths you provide should be relative to the working directory. You do not need to specify the working directory in your function calls as it is automatically injected for security reasons.
+"""
+
+
+
 
 #load api key
 api_key = os.environ.get("GEMINI_API_KEY")
@@ -36,7 +48,8 @@ messages = [
 response = client.models.generate_content(
     model='gemini-2.0-flash-001',
     contents=messages,
-    config=types.GenerateContentConfig(system_instruction=SYSTEM_PROMPT),
+    config=types.GenerateContentConfig(
+        tools=[available_functions],system_instruction=SYSTEM_PROMPT),
     ) 
    
 # log prompt tokens used
@@ -54,7 +67,11 @@ for arg in sys.argv[1:]:
         print(f"Response tokens: {response_tokens}"),
         print(f"User prompt: {user_prompt}")
 
-print(response.text)
+    if response.function_calls != None:
+        for call in response.function_calls:
+            print(f"Calling function: {call.name}({call.args})")
+    else:
+        print(f'{response.text}')
 
 #print(get_files_info("calculator","pkg"))
 
