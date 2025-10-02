@@ -1,5 +1,25 @@
 import subprocess
 import os
+from google import genai
+
+
+schema_run_python_file = genai.types.FunctionDeclaration(
+    name="run_python_file",
+    description="Executes the specified file, constrained to the working directory.",
+    parameters=genai.types.Schema(
+        type=genai.types.Type.OBJECT,
+        properties={
+            "file_path": genai.types.Schema(
+                type=genai.types.Type.STRING,
+                description="The specific path to file to run, relative to the working directory. If not provided, lists files in the working directory itself.",
+            ),
+            "args": genai.types.Schema(
+                type=genai.types.Type.STRING,
+                description="The arguments to excecute with the file.",
+                ),
+        },
+    ),
+)
 
 def run_python_file(working_directory, file_path, args=[]):
     abs_working_directory = os.path.abspath(working_directory)

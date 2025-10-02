@@ -1,7 +1,14 @@
 #import OS and dotenv for reading api key from .env file
 import os
 from dotenv import load_dotenv
-from functions.get_files_info import *
+from functions.get_file_content import get_file_content, schema_get_file_content
+from functions.get_files_info import get_files_info, schema_get_files_info
+from functions.write_file import write_file, schema_write_file
+from functions.run_python_file import run_python_file, schema_run_python_file
+from config import MAX_CHARS
+
+
+
 load_dotenv()
 
 SYSTEM_PROMPT = """
@@ -10,6 +17,9 @@ You are a helpful AI coding agent.
 When a user asks a question or makes a request, make a function call plan. You can perform the following operations:
 
 - List files and directories
+- Read file contents
+- Execute Python files with optional arguments
+- Write or overwrite files
 
 All paths you provide should be relative to the working directory. You do not need to specify the working directory in your function calls as it is automatically injected for security reasons.
 """
@@ -22,6 +32,17 @@ api_key = os.environ.get("GEMINI_API_KEY")
 
 #import gemini genai
 from google import genai
+
+
+#Set available functions
+available_functions = genai.types.Tool(
+    function_declarations=[
+        schema_get_files_info,
+        schema_get_file_content,
+        schema_run_python_file,
+        schema_write_file,
+    ]
+)
 
 #map client to apikey
 client = genai.Client(api_key=api_key)
